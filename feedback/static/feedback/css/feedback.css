@@ -1,0 +1,223 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f4f4f8; /* softer off-white background */
+    color: #333;
+}
+
+/* Navbar */
+.navbar {
+    background: #5a4e7b; /* muted purple */
+    display: flex;
+    justify-content: flex-end;
+    padding: 12px 40px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+.navbar a {
+    color: #f1f1f1;
+    margin-right: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: 8px;
+    transition: background 0.3s, transform 0.2s;
+}
+.navbar a:hover {
+    background: #7d6aa0;
+    transform: translateY(-2px);
+}
+.navbar a.active {
+    background: #9b85c5;
+    color: #fff;
+}
+
+/* Tabs content */
+.tab-content {
+    display: none;
+    padding: 30px 50px;
+    width: 100%; /* full width */
+    max-width: none;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+.tab-content.active {
+    display: block;
+}
+
+/* Form styling */
+form {
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #4b3f72;
+}
+form input, form select, form textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    transition: border 0.2s, box-shadow 0.2s;
+}
+form input:focus, form select:focus, form textarea:focus {
+    border-color: #7d6aa0;
+    box-shadow: 0 0 5px rgba(125,106,160,0.3);
+    outline: none;
+}
+form button {
+    background: #7d6aa0;
+    color: #fff;
+    border: none;
+    padding: 14px 22px;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: background 0.3s, transform 0.2s;
+}
+form button:hover {
+    background: #9b85c5;
+    transform: translateY(-2px);
+}
+form textarea {
+    min-height: 140px;
+    resize: vertical;
+}
+.stars i {
+    color: #ffc107; /* gold color */
+    margin-right: 2px;
+}
+
+/* Reviews */
+ul {
+    list-style: none;
+    padding: 0;
+}
+li {
+    background: #fff;
+    margin-bottom: 18px;
+    padding: 22px;
+    border-radius: 12px;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+}
+li:hover {
+    transform: translateY(-2px);
+}
+li strong {
+    color: #5a4e7b;
+}
+li em {
+    color: #9b85c5;
+}
+.stars {
+    color: #b9a7d3; /* soft purple */
+}
+
+/* Dashboard charts grid */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+    width: 100%;
+}
+.dashboard-grid iframe {
+    width: 100%;
+    height: 550px;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+/* Full width layout for analytics dashboard */
+#analytics-tab {
+    padding: 30px 50px;
+}
+/* Dashboard charts grid - improved for 5 iframes */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 per row for balance */
+    gap: 25px;
+    margin-top: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Center the last iframe if odd number */
+.dashboard-grid iframe:last-child {
+    grid-column: 1 / -1; /* spans both columns */
+}
+
+/* Dashboard iframe styling */
+.dashboard-grid iframe {
+    width: 100%;
+    height: 550px;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.dashboard-grid iframe:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+}
+
+/* Filter Section */
+.filter-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f7f7f7;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.filter-section label {
+    font-weight: bold;
+    margin-right: 5px;
+    align-self: center;
+}
+
+.filter-section select {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+/* Feedback List */
+#feedback-list {
+    list-style: none;
+    padding: 0;
+}
+
+#feedback-list li {
+    background-color: #fafafa;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+#feedback-list li .stars {
+    color: #ffb400;
+    margin-left: 5px;
+}
+
+/* Responsive for smaller screens */
+@media (max-width: 768px) {
+    .filter-section {
+        flex-direction: column;
+    }
+}

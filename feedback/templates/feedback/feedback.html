@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Product Feedback</title>
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'feedback/css/feedback.css' %}">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Navbar -->
+<div class="navbar">
+    <a href="#" class="tab-link active" data-tab="home-tab">Home</a>
+    <a href="#" class="tab-link" data-tab="form-tab">Feedback Form</a>
+    <a href="#" class="tab-link" data-tab="reviews-tab">All Reviews</a>
+    <a href="#" class="tab-link" data-tab="analytics-tab">Analytics</a>
+</div>
+
+<!-- Tabs -->
+<div id="home-tab" class="tab-content active">
+    <h1>Welcome to the Product Feedback Project</h1>
+    <p>
+        This web application is developed as part of my internship task. The purpose of this project is to 
+        collect feedback from users about various products and analyze the results using interactive charts.
+    </p>
+    <p>
+        Features included in this application:
+        <ul>
+            <li>Submit product feedback via a simple form.</li>
+            <li>View all feedback submitted by users in a structured list.</li>
+            <li>Analyze product ratings and feedback trends through dashboards.</li>
+        </ul>
+    </p>
+    <p>
+        This project demonstrates data collection, storage, and visualization techniques in a practical scenario.
+        The analytics are powered using tools like Metabase to provide insights from the collected data.
+    </p>
+</div>
+
+<div id="form-tab" class="tab-content">
+    <h1>Product Feedback Form</h1>
+    <form method="POST">
+        {% csrf_token %}
+
+        <label for="id_name">Your Name</label>
+        {{ form.name }}
+
+        <label for="id_product_name">Product</label>
+        {{ form.product_name }}
+
+        <label for="id_rating">Rating</label>
+        {{ form.rating }}
+
+        <label for="id_comments">Comments</label>
+        {{ form.comments }}
+
+        <button type="submit">Submit Feedback</button>
+    </form>
+</div>
+
+<div id="reviews-tab" class="tab-content">
+    <h2>Feedback</h2>
+
+    <!-- Filter Section -->
+    <div class="filter-section">
+        <label for="filter-product">Filter by Product:</label>
+        <select id="filter-product">
+            <option value="">All Products</option>
+            {% for product in product_list %}
+                <option value="{{ product }}">{{ product }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="filter-rating">Filter by Rating:</label>
+        <select id="filter-rating">
+            <option value="">All Ratings</option>
+            {% for r in "12345" %}
+                <option value="{{ r }}">{{ r }} </option>
+            {% endfor %}
+        </select>
+
+        <label for="filter-year">Filter by Year:</label>
+        <select id="filter-year">
+            <option value="">All Years</option>
+            {% for year in years_list %}
+                <option value="{{ year }}">{{ year }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="filter-month">Filter by Month:</label>
+        <select id="filter-month">
+            <option value="">All Months</option>
+            {% for m in months_list %}
+                <option value="{{ m.0 }}">{{ m.1 }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <ul id="feedback-list">
+        {% for f in feedback_list %}
+        <li data-product="{{ f.product_name }}" data-rating="{{ f.rating }}" 
+    data-year="{{ f.created_at|date:'Y' }}" data-month="{{ f.created_at|date:'n' }}">
+
+            <strong>{{ f.name }}</strong> &rarr; 
+            <em>{{ f.product_name }}</em> - 
+            <span class="stars">
+                {% for i in " "|ljust:f.rating %}
+                    <i class="bi bi-star-fill"></i>
+                {% endfor %}
+            </span>
+            <p>{{ f.comments }}</p>
+            <small>{{ f.created_at|date:"M d, Y H:i" }}</small>
+        </li>
+        {% empty %}
+        <li>No feedback yet.</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div id="analytics-tab" class="tab-content">
+    <h2>Analytics Dashboard</h2>
+    <div class="dashboard-grid">
+        <iframe src="http://localhost:3000/public/question/ad0d0cd8-7ecd-419e-aadb-3f014d0ff9c6"></iframe>
+        <iframe src="http://localhost:3000/public/question/f5d10a09-910b-4fd4-bc19-d75b4d30efef"></iframe>
+        <iframe src="http://localhost:3000/public/question/512c2580-3b54-4d28-9340-c3431ce830a5"></iframe>
+        <iframe src="http://localhost:3000/public/question/b3558ffa-987b-40cc-9c93-c6190b8c6180"></iframe>
+        <iframe src="http://localhost:3000/public/question/d61714e2-9f40-49bc-ab11-4b8bfdcfec0b"></iframe>
+    </div>
+</div>
+
+<!-- JS for tabs -->
+<script>
+const links = document.querySelectorAll('.tab-link');
+const tabs = document.querySelectorAll('.tab-content');
+
+links.forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = link.dataset.tab;
+
+        links.forEach(l => l.classList.remove('active'));
+        tabs.forEach(t => t.classList.remove('active'));
+
+        link.classList.add('active');
+        document.getElementById(target).classList.add('active');
+    });
+});
+
+// Filters for Reviews
+const filterProduct = document.getElementById('filter-product');
+const filterRating = document.getElementById('filter-rating');
+const filterYear = document.getElementById('filter-year');
+const filterMonth = document.getElementById('filter-month');
+const feedbackList = document.getElementById('feedback-list');
+
+function filterFeedback() {
+    const productVal = filterProduct.value;
+    const ratingVal = filterRating.value;
+    const yearVal = filterYear.value;
+    const monthVal = filterMonth.value;
+
+    const items = feedbackList.querySelectorAll('li');
+    items.forEach(li => {
+        const matchesProduct = !productVal || li.dataset.product === productVal;
+        const matchesRating = !ratingVal || li.dataset.rating === ratingVal;
+        const matchesYear = !yearVal || li.dataset.year === yearVal;
+        const matchesMonth = !monthVal || li.dataset.month === monthVal;
+
+        if (matchesProduct && matchesRating && matchesYear && matchesMonth) {
+            li.style.display = '';
+        } else {
+            li.style.display = 'none';
+        }
+    });
+}
+
+filterProduct.addEventListener('change', filterFeedback);
+filterRating.addEventListener('change', filterFeedback);
+filterYear.addEventListener('change', filterFeedback);
+filterMonth.addEventListener('change', filterFeedback);
+</script>
+
+</body>
+</html>
