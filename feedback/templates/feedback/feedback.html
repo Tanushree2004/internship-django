@@ -40,20 +40,32 @@
 
 <div id="form-tab" class="tab-content">
     <h1>Product Feedback Form</h1>
-    <form method="POST">
+    <form method="POST" novalidate>
         {% csrf_token %}
 
         <label for="id_name">Your Name</label>
         {{ form.name }}
+        {% if form.name.errors %}
+            <div class="error">{{ form.name.errors|striptags }}</div>
+        {% endif %}
 
         <label for="id_product_name">Product</label>
         {{ form.product_name }}
+        {% if form.product_name.errors %}
+            <div class="error">{{ form.product_name.errors|striptags }}</div>
+        {% endif %}
 
         <label for="id_rating">Rating</label>
         {{ form.rating }}
+        {% if form.rating.errors %}
+            <div class="error">{{ form.rating.errors|striptags }}</div>
+        {% endif %}
 
         <label for="id_comments">Comments</label>
         {{ form.comments }}
+        {% if form.comments.errors %}
+            <div class="error">{{ form.comments.errors|striptags }}</div>
+        {% endif %}
 
         <button type="submit">Submit Feedback</button>
     </form>
@@ -179,7 +191,46 @@ filterProduct.addEventListener('change', filterFeedback);
 filterRating.addEventListener('change', filterFeedback);
 filterYear.addEventListener('change', filterFeedback);
 filterMonth.addEventListener('change', filterFeedback);
+
+const form = document.querySelector('form');
+form.addEventListener('submit', (e) => {
+    let valid = true;
+    const name = document.getElementById('id_name');
+    const rating = document.getElementById('id_rating');
+    const comments = document.getElementById('id_comments');
+
+    // Clear previous errors
+    document.querySelectorAll('.client-error').forEach(el => el.remove());
+
+    if (!name.value.trim()) {
+        const error = document.createElement('div');
+        error.className = 'error client-error';
+        error.innerText = 'Please enter your name.';
+        name.parentNode.insertBefore(error, name.nextSibling);
+        valid = false;
+    }
+
+    const ratingVal = parseInt(rating.value);
+    if (!rating.value || ratingVal < 1 || ratingVal > 5) {
+        const error = document.createElement('div');
+        error.className = 'error client-error';
+        error.innerText = 'Rating must be between 1 and 5.';
+        rating.parentNode.insertBefore(error, rating.nextSibling);
+        valid = false;
+    }
+
+    if (comments.value.length > 500) {
+        const error = document.createElement('div');
+        error.className = 'error client-error';
+        error.innerText = 'Comments cannot exceed 500 characters.';
+        comments.parentNode.insertBefore(error, comments.nextSibling);
+        valid = false;
+    }
+
+    if (!valid) e.preventDefault();
+});
 </script>
+
 
 </body>
 </html>

@@ -41,3 +41,29 @@ class ProductFeedbackForm(forms.ModelForm):
     class Meta:
         model = ProductFeedback
         fields = ['name', 'product_name', 'rating', 'comments']
+        widgets = {
+            'comments': forms.Textarea(attrs={'rows': 4, 'cols': 40}),
+        }
+        error_messages = {
+            'name': {
+                'required': "Please enter your name.",
+            },
+            'rating': {
+                'required': "Please give a rating between 1 and 5.",
+            },
+            'comments': {
+                'max_length': "Comments cannot exceed 500 characters.",
+            },
+        }
+
+    def clean_rating(self):
+        rating = self.cleaned_data.get('rating')
+        if rating < 1 or rating > 5:
+            raise forms.ValidationError("Rating must be between 1 and 5.")
+        return rating
+
+    def clean_comments(self):
+        comments = self.cleaned_data.get('comments')
+        if comments and len(comments) > 500:
+            raise forms.ValidationError("Comments cannot exceed 500 characters.")
+        return comments

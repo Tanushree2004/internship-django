@@ -6,6 +6,7 @@ body {
     color: #333;
 }
 
+
 /* Navbar */
 .navbar {
     background: #5a4e7b; /* muted purple */
@@ -93,6 +94,11 @@ form textarea {
 .stars i {
     color: #ffc107; /* gold color */
     margin-right: 2px;
+}
+.error {
+    color: red;
+    font-size: 0.9em;
+    margin-bottom: 10px;
 }
 
 /* Reviews */
